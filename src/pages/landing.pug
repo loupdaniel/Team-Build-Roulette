@@ -17,7 +17,7 @@ include ../mixins/icons
     .slots-container
       .slot-group
         .slot-text
-          p Song Title
+          p Vocal
 
         .slot
           .slot__outer
@@ -27,7 +27,7 @@ include ../mixins/icons
 
       .slot-group
         .slot-text
-          p Genre
+          p Guitar
 
         .slot
           .slot__outer
@@ -37,13 +37,34 @@ include ../mixins/icons
             
       .slot-group
         .slot-text
-          p Style
+          p Keyboard
 
         .slot
           .slot__outer
             .slot__inner
               .slot__shadow
                 #stylereel.stylereel
+
+    .slots-container
+      .slot-group
+        .slot-text
+          p Bass
+
+        .slot
+          .slot__outer
+            .slot__inner
+              .slot__shadow
+                #bassreel.bassreel
+
+      .slot-group
+        .slot-text
+          p Drum
+
+        .slot
+          .slot__outer
+            .slot__inner
+              .slot__shadow
+                #drumreel.drumreel
 
     .solid-button-box
       button#draw-button.solid-button Draw!
@@ -53,14 +74,20 @@ include ../mixins/icons
       div.settings__panel__group
         h1.settings__title Settings
         div.input-group
-          label.input-label(for="song-title-list") Song Title List
+          label.input-label(for="song-title-list") Vocal List
           textarea.input-field.input-field--textarea(rows="8" placeholder="Separate each name by line break" id="name-list")
 
-          label.input-label(for="genre-list") Genre List
+          label.input-label(for="genre-list") Guitar List
           textarea.input-field.input-field--textarea(rows="8" placeholder="Separate each name by line break" id="genre-list")
 
-          label.input-label(for="style-list") Style List
+          label.input-label(for="style-list") Keyboard List
           textarea.input-field.input-field--textarea(rows="8" placeholder="Separate each name by line break" id="style-list")
+
+          label.input-label(for="bass-list") Bass List
+          textarea.input-field.input-field--textarea(rows="8" placeholder="Separate each name by line break" id="bass-list")
+
+          label.input-label(for="drum-list") Drum List
+          textarea.input-field.input-field--textarea(rows="8" placeholder="Separate each name by line break" id="drum-list")
 
         div.input-group.input-group--2-column
           label.input-label(for="remove-from-list") Remove winner from list

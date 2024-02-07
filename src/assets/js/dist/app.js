@@ -52,6 +52,8 @@ var SoundEffects_1 = require("@js/SoundEffects");
     var nameListTextArea = document.getElementById('name-list');
     var genreListTextArea = document.getElementById('genre-list');
     var styleListTextArea = document.getElementById('style-list');
+    var bassListTextArea = document.getElementById('bass-list');
+    var drumListTextArea = document.getElementById('drum-list');
     var removeNameFromListCheckbox = document.getElementById('remove-from-list');
     var enableSoundCheckbox = document.getElementById('enable-sound');
     // Graceful exit if necessary elements are not found
@@ -66,6 +68,8 @@ var SoundEffects_1 = require("@js/SoundEffects");
         && nameListTextArea
         && genreListTextArea
         && styleListTextArea
+        && bassListTextArea
+        && drumListTextArea
         && removeNameFromListCheckbox
         && enableSoundCheckbox)) {
         console.error('One or more Element ID is invalid. This is possibly a bug.');
@@ -131,6 +135,8 @@ var SoundEffects_1 = require("@js/SoundEffects");
         reelContainerSelector: '#reel',
         reelGenreContainerSelector: '#genrereel',
         reelStyleContainerSelector: '#stylereel',
+        reelBassContainerSelector: '#bassreel',
+        reelDrumContainerSelector: '#drumreel',
         maxReelItems: MAX_REEL_ITEMS,
         onSpinStart: onSpinStart,
         onSpinEnd: onSpinEnd,
@@ -141,6 +147,8 @@ var SoundEffects_1 = require("@js/SoundEffects");
         nameListTextArea.value = slot.names.length ? slot.names.join('\n') : '';
         genreListTextArea.value = slot.genres.length ? slot.genres.join('\n') : '';
         styleListTextArea.value = slot.styles.length ? slot.styles.join('\n') : '';
+        bassListTextArea.value = slot.basses.length ? slot.basses.join('\n') : '';
+        drumListTextArea.value = slot.drums.length ? slot.drums.join('\n') : '';
         removeNameFromListCheckbox.checked = slot.shouldRemoveWinnerFromNameList;
         enableSoundCheckbox.checked = !soundEffects.mute;
         settingsWrapper.style.display = 'block';
@@ -186,6 +194,12 @@ var SoundEffects_1 = require("@js/SoundEffects");
             : [];
         slot.styles = nameListTextArea.value
             ? styleListTextArea.value.split(/\n/).filter(function (name) { return Boolean(name.trim()); })
+            : [];
+        slot.basses = nameListTextArea.value
+            ? bassListTextArea.value.split(/\n/).filter(function (name) { return Boolean(name.trim()); })
+            : [];
+        slot.drums = nameListTextArea.value
+            ? drumListTextArea.value.split(/\n/).filter(function (name) { return Boolean(name.trim()); })
             : [];
         slot.shouldRemoveWinnerFromNameList = removeNameFromListCheckbox.checked;
         soundEffects.mute = !enableSoundCheckbox.checked;

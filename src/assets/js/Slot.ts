@@ -9,6 +9,10 @@ interface SlotConfigurations {
   reelGenreContainerSelector: string;
 
   reelStyleContainerSelector: string;
+
+  reelBassContainerSelector: string;
+
+  reelDrumContainerSelector: string;
   /** User configuration for callback function that runs before spinning reel */
   onSpinStart?: () => void;
   /** User configuration for callback function that runs after spinning reel */
@@ -27,6 +31,10 @@ export default class Slot {
 
   private styleList: string[];
 
+  private bassList: string[];
+
+  private drumList: string[];
+
   /** Whether there is a previous winner element displayed in reel */
   private havePreviousWinner: boolean;
 
@@ -36,6 +44,10 @@ export default class Slot {
   private reelGenreContainer: HTMLElement | null;
 
   private reelStyleContainer: HTMLElement | null;
+
+  private reelBassContainer: HTMLElement | null;
+
+  private reelDrumContainer: HTMLElement | null;
 
   /** Maximum item inside a reel */
   private maxReelItems: NonNullable<SlotConfigurations['maxReelItems']>;
@@ -49,6 +61,10 @@ export default class Slot {
   private reelGenreAnimation?: Animation;
 
   private reelStyleAnimation?: Animation;
+
+  private reelBassAnimation?: Animation;
+
+  private reelDrumAnimation?: Animation;
 
   private createReelAnimation(container: HTMLElement | null): Animation | undefined {
     return container?.animate(
@@ -84,6 +100,8 @@ export default class Slot {
    * @param reelContainerSelector  The element ID of reel items to be appended
    * @param reelGenreContainerSelector
    * @param reelStyleContainerSelector
+   * @param reelBassContainerSelector
+   * @param reelDrumContainerSelector
    * @param onSpinStart  Callback function that runs before spinning reel
    * @param onNameListChanged  Callback function that runs when user updates the name list
    */
@@ -94,6 +112,8 @@ export default class Slot {
       reelContainerSelector,
       reelGenreContainerSelector,
       reelStyleContainerSelector,
+      reelBassContainerSelector,
+      reelDrumContainerSelector,
       onSpinStart,
       onSpinEnd,
       onNameListChanged
@@ -102,10 +122,14 @@ export default class Slot {
     this.nameList = [];
     this.genreList = [];
     this.styleList = [];
+    this.bassList = [];
+    this.drumList = [];
     this.havePreviousWinner = false;
     this.reelContainer = document.querySelector(reelContainerSelector);
     this.reelGenreContainer = document.querySelector(reelGenreContainerSelector);
     this.reelStyleContainer = document.querySelector(reelStyleContainerSelector);
+    this.reelBassContainer = document.querySelector(reelBassContainerSelector);
+    this.reelDrumContainer = document.querySelector(reelDrumContainerSelector);
     this.maxReelItems = maxReelItems;
     this.shouldRemoveWinner = removeWinner;
     this.onSpinStart = onSpinStart;
@@ -116,6 +140,8 @@ export default class Slot {
     this.reelAnimation = this.createReelAnimation(this.reelContainer);
     this.reelGenreAnimation = this.createReelAnimation(this.reelGenreContainer);
     this.reelStyleAnimation = this.createReelAnimation(this.reelStyleContainer);
+    this.reelBassAnimation = this.createReelAnimation(this.reelBassContainer);
+    this.reelDrumAnimation = this.createReelAnimation(this.reelDrumContainer);
   }
 
   /**
@@ -197,6 +223,58 @@ export default class Slot {
   }
 
   /**
+   * Setter for name list
+   * @param basses  List of names to draw a winner from
+   */
+  set basses(basses: string[]) {
+    this.bassList = basses;
+
+    const reelItemsToRemove = this.reelBassContainer?.children
+      ? Array.from(this.reelBassContainer.children)
+      : [];
+
+    reelItemsToRemove
+      .forEach((element) => element.remove());
+
+    this.havePreviousWinner = false;
+
+    if (this.onNameListChanged) {
+      this.onNameListChanged();
+    }
+  }
+
+  /** Getter for name list */
+  get basses(): string[] {
+    return this.bassList;
+  }
+
+  /**
+   * Setter for name list
+   * @param drums  List of names to draw a winner from
+   */
+  set drums(drums: string[]) {
+    this.drumList = drums;
+
+    const reelItemsToRemove = this.reelDrumContainer?.children
+      ? Array.from(this.reelDrumContainer.children)
+      : [];
+
+    reelItemsToRemove
+      .forEach((element) => element.remove());
+
+    this.havePreviousWinner = false;
+
+    if (this.onNameListChanged) {
+      this.onNameListChanged();
+    }
+  }
+
+  /** Getter for name list */
+  get drums(): string[] {
+    return this.drumList;
+  }
+
+  /**
    * Setter for shouldRemoveWinner
    * @param removeWinner  Whether the winner should be removed from name list
    */
@@ -249,14 +327,20 @@ export default class Slot {
       reelContainer,
       reelGenreContainer,
       reelStyleContainer,
+      reelBassContainer,
+      reelDrumContainer,
       reelAnimation,
       reelGenreAnimation,
       reelStyleAnimation,
+      reelBassAnimation,
+      reelDrumAnimation,
       shouldRemoveWinner
     } = this;
     if ((!reelContainer || !reelAnimation)
       && (!reelGenreContainer || !reelGenreAnimation)
-      && (!reelStyleContainer || !reelStyleAnimation)) {
+      && (!reelStyleContainer || !reelStyleAnimation)
+      && (!reelBassContainer || !reelBassAnimation)
+      && (!reelDrumContainer || !reelDrumAnimation)) {
       return false;
     }
 
@@ -287,6 +371,22 @@ export default class Slot {
 
     randomStyles = randomStyles.slice(0, this.maxReelItems - Number(this.havePreviousWinner));
 
+    let randomBasses = Slot.shuffleNames<string>(this.bassList);
+
+    while (randomBasses.length && randomBasses.length < this.maxReelItems) {
+      randomBasses = [...randomBasses, ...randomBasses];
+    }
+
+    randomBasses = randomBasses.slice(0, this.maxReelItems - Number(this.havePreviousWinner));
+
+    let randomDrums = Slot.shuffleNames<string>(this.drumList);
+
+    while (randomDrums.length && randomDrums.length < this.maxReelItems) {
+      randomDrums = [...randomDrums, ...randomDrums];
+    }
+
+    randomDrums = randomDrums.slice(0, this.maxReelItems - Number(this.havePreviousWinner));
+
     const nameFragment = document.createDocumentFragment();
     randomNames.forEach((name) => {
       const newReelItem = document.createElement('div');
@@ -311,6 +411,22 @@ export default class Slot {
     });
     reelStyleContainer!.appendChild(styleFragment);
 
+    const bassFragment = document.createDocumentFragment();
+    randomBasses.forEach((style) => {
+      const newBassReelItem = document.createElement('div');
+      newBassReelItem.innerHTML = style;
+      bassFragment.appendChild(newBassReelItem);
+    });
+    reelBassContainer!.appendChild(bassFragment);
+
+    const drumFragment = document.createDocumentFragment();
+    randomDrums.forEach((style) => {
+      const newDrumReelItem = document.createElement('div');
+      newDrumReelItem.innerHTML = style;
+      drumFragment.appendChild(newDrumReelItem);
+    });
+    reelDrumContainer!.appendChild(drumFragment);
+
     console.log('Displayed items: ', randomNames);
     console.log('Winner: ', randomNames[randomNames.length - 1]);
 
@@ -327,6 +443,14 @@ export default class Slot {
       this.styleList.splice(this.styleList.findIndex(
         (style) => style === randomStyles[randomStyles.length - 1]
       ), 1);
+
+      this.bassList.splice(this.bassList.findIndex(
+        (bass) => bass === randomBasses[randomBasses.length - 1]
+      ), 1);
+
+      this.drumList.splice(this.drumList.findIndex(
+        (drum) => drum === randomDrums[randomDrums.length - 1]
+      ), 1);
     }
 
     console.log('Remaining: ', this.nameList);
@@ -337,16 +461,22 @@ export default class Slot {
         reelAnimation?.removeEventListener('finish', onAnimationFinish);
         reelGenreAnimation?.removeEventListener('finish', onAnimationFinish);
         reelStyleAnimation?.removeEventListener('finish', onAnimationFinish);
+        reelBassAnimation?.removeEventListener('finish', onAnimationFinish);
+        reelDrumAnimation?.removeEventListener('finish', onAnimationFinish);
         resolve();
       };
 
       reelAnimation?.addEventListener('finish', onAnimationFinish);
       reelGenreAnimation?.addEventListener('finish', onAnimationFinish);
       reelStyleAnimation?.addEventListener('finish', onAnimationFinish);
+      reelBassAnimation?.addEventListener('finish', onAnimationFinish);
+      reelDrumAnimation?.addEventListener('finish', onAnimationFinish);
 
       reelAnimation?.play();
       reelGenreAnimation?.play();
       reelStyleAnimation?.play();
+      reelBassAnimation?.play();
+      reelDrumAnimation?.play();
     });
 
     await animationPromise;
@@ -356,6 +486,8 @@ export default class Slot {
     reelAnimation?.finish();
     reelGenreAnimation?.finish();
     reelStyleAnimation?.finish();
+    reelBassAnimation?.finish();
+    reelDrumAnimation?.finish();
 
     Array.from(reelContainer!.children)
       .slice(0, reelContainer!.children.length - 1)
@@ -367,6 +499,14 @@ export default class Slot {
 
     Array.from(reelStyleContainer!.children)
       .slice(0, reelStyleContainer!.children.length - 1)
+      .forEach((element) => element.remove());
+    
+    Array.from(reelBassContainer!.children)
+      .slice(0, reelBassContainer!.children.length - 1)
+        .forEach((element) => element.remove());
+    
+    Array.from(reelDrumContainer!.children)
+      .slice(0, reelDrumContainer!.children.length - 1)
       .forEach((element) => element.remove());
 
     this.havePreviousWinner = true;

@@ -52,18 +52,24 @@ var Slot = /** @class */ (function () {
      * @param reelContainerSelector  The element ID of reel items to be appended
      * @param reelGenreContainerSelector
      * @param reelStyleContainerSelector
+     * @param reelBassContainerSelector
+     * @param reelDrumContainerSelector
      * @param onSpinStart  Callback function that runs before spinning reel
      * @param onNameListChanged  Callback function that runs when user updates the name list
      */
     function Slot(_a) {
-        var _b = _a.maxReelItems, maxReelItems = _b === void 0 ? 30 : _b, _c = _a.removeWinner, removeWinner = _c === void 0 ? true : _c, reelContainerSelector = _a.reelContainerSelector, reelGenreContainerSelector = _a.reelGenreContainerSelector, reelStyleContainerSelector = _a.reelStyleContainerSelector, onSpinStart = _a.onSpinStart, onSpinEnd = _a.onSpinEnd, onNameListChanged = _a.onNameListChanged;
+        var _b = _a.maxReelItems, maxReelItems = _b === void 0 ? 30 : _b, _c = _a.removeWinner, removeWinner = _c === void 0 ? true : _c, reelContainerSelector = _a.reelContainerSelector, reelGenreContainerSelector = _a.reelGenreContainerSelector, reelStyleContainerSelector = _a.reelStyleContainerSelector, reelBassContainerSelector = _a.reelBassContainerSelector, reelDrumContainerSelector = _a.reelDrumContainerSelector, onSpinStart = _a.onSpinStart, onSpinEnd = _a.onSpinEnd, onNameListChanged = _a.onNameListChanged;
         this.nameList = [];
         this.genreList = [];
         this.styleList = [];
+        this.bassList = [];
+        this.drumList = [];
         this.havePreviousWinner = false;
         this.reelContainer = document.querySelector(reelContainerSelector);
         this.reelGenreContainer = document.querySelector(reelGenreContainerSelector);
         this.reelStyleContainer = document.querySelector(reelStyleContainerSelector);
+        this.reelBassContainer = document.querySelector(reelBassContainerSelector);
+        this.reelDrumContainer = document.querySelector(reelDrumContainerSelector);
         this.maxReelItems = maxReelItems;
         this.shouldRemoveWinner = removeWinner;
         this.onSpinStart = onSpinStart;
@@ -73,6 +79,8 @@ var Slot = /** @class */ (function () {
         this.reelAnimation = this.createReelAnimation(this.reelContainer);
         this.reelGenreAnimation = this.createReelAnimation(this.reelGenreContainer);
         this.reelStyleAnimation = this.createReelAnimation(this.reelStyleContainer);
+        this.reelBassAnimation = this.createReelAnimation(this.reelBassContainer);
+        this.reelDrumAnimation = this.createReelAnimation(this.reelDrumContainer);
     }
     Slot.prototype.createReelAnimation = function (container) {
         return container === null || container === void 0 ? void 0 : container.animate([
@@ -160,6 +168,54 @@ var Slot = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
+    Object.defineProperty(Slot.prototype, "basses", {
+        /** Getter for name list */
+        get: function () {
+            return this.bassList;
+        },
+        /**
+         * Setter for name list
+         * @param basses  List of names to draw a winner from
+         */
+        set: function (basses) {
+            var _a;
+            this.bassList = basses;
+            var reelItemsToRemove = ((_a = this.reelBassContainer) === null || _a === void 0 ? void 0 : _a.children) ? Array.from(this.reelBassContainer.children)
+                : [];
+            reelItemsToRemove
+                .forEach(function (element) { return element.remove(); });
+            this.havePreviousWinner = false;
+            if (this.onNameListChanged) {
+                this.onNameListChanged();
+            }
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(Slot.prototype, "drums", {
+        /** Getter for name list */
+        get: function () {
+            return this.drumList;
+        },
+        /**
+         * Setter for name list
+         * @param drums  List of names to draw a winner from
+         */
+        set: function (drums) {
+            var _a;
+            this.drumList = drums;
+            var reelItemsToRemove = ((_a = this.reelDrumContainer) === null || _a === void 0 ? void 0 : _a.children) ? Array.from(this.reelDrumContainer.children)
+                : [];
+            reelItemsToRemove
+                .forEach(function (element) { return element.remove(); });
+            this.havePreviousWinner = false;
+            if (this.onNameListChanged) {
+                this.onNameListChanged();
+            }
+        },
+        enumerable: false,
+        configurable: true
+    });
     Object.defineProperty(Slot.prototype, "shouldRemoveWinnerFromNameList", {
         /** Getter for shouldRemoveWinner */
         get: function () {
@@ -202,7 +258,7 @@ var Slot = /** @class */ (function () {
      */
     Slot.prototype.spin = function () {
         return __awaiter(this, void 0, Promise, function () {
-            var _a, reelContainer, reelGenreContainer, reelStyleContainer, reelAnimation, reelGenreAnimation, reelStyleAnimation, shouldRemoveWinner, randomNames, randomGenres, randomStyles, nameFragment, genreFragment, styleFragment, animationPromise;
+            var _a, reelContainer, reelGenreContainer, reelStyleContainer, reelBassContainer, reelDrumContainer, reelAnimation, reelGenreAnimation, reelStyleAnimation, reelBassAnimation, reelDrumAnimation, shouldRemoveWinner, randomNames, randomGenres, randomStyles, randomBasses, randomDrums, nameFragment, genreFragment, styleFragment, bassFragment, drumFragment, animationPromise;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
@@ -213,10 +269,12 @@ var Slot = /** @class */ (function () {
                         if (this.onSpinStart) {
                             this.onSpinStart();
                         }
-                        _a = this, reelContainer = _a.reelContainer, reelGenreContainer = _a.reelGenreContainer, reelStyleContainer = _a.reelStyleContainer, reelAnimation = _a.reelAnimation, reelGenreAnimation = _a.reelGenreAnimation, reelStyleAnimation = _a.reelStyleAnimation, shouldRemoveWinner = _a.shouldRemoveWinner;
+                        _a = this, reelContainer = _a.reelContainer, reelGenreContainer = _a.reelGenreContainer, reelStyleContainer = _a.reelStyleContainer, reelBassContainer = _a.reelBassContainer, reelDrumContainer = _a.reelDrumContainer, reelAnimation = _a.reelAnimation, reelGenreAnimation = _a.reelGenreAnimation, reelStyleAnimation = _a.reelStyleAnimation, reelBassAnimation = _a.reelBassAnimation, reelDrumAnimation = _a.reelDrumAnimation, shouldRemoveWinner = _a.shouldRemoveWinner;
                         if ((!reelContainer || !reelAnimation)
                             && (!reelGenreContainer || !reelGenreAnimation)
-                            && (!reelStyleContainer || !reelStyleAnimation)) {
+                            && (!reelStyleContainer || !reelStyleAnimation)
+                            && (!reelBassContainer || !reelBassAnimation)
+                            && (!reelDrumContainer || !reelDrumAnimation)) {
                             return [2 /*return*/, false];
                         }
                         randomNames = Slot.shuffleNames(this.nameList);
@@ -234,6 +292,16 @@ var Slot = /** @class */ (function () {
                             randomStyles = __spreadArrays(randomStyles, randomStyles);
                         }
                         randomStyles = randomStyles.slice(0, this.maxReelItems - Number(this.havePreviousWinner));
+                        randomBasses = Slot.shuffleNames(this.bassList);
+                        while (randomBasses.length && randomBasses.length < this.maxReelItems) {
+                            randomBasses = __spreadArrays(randomBasses, randomBasses);
+                        }
+                        randomBasses = randomBasses.slice(0, this.maxReelItems - Number(this.havePreviousWinner));
+                        randomDrums = Slot.shuffleNames(this.drumList);
+                        while (randomDrums.length && randomDrums.length < this.maxReelItems) {
+                            randomDrums = __spreadArrays(randomDrums, randomDrums);
+                        }
+                        randomDrums = randomDrums.slice(0, this.maxReelItems - Number(this.havePreviousWinner));
                         nameFragment = document.createDocumentFragment();
                         randomNames.forEach(function (name) {
                             var newReelItem = document.createElement('div');
@@ -255,6 +323,20 @@ var Slot = /** @class */ (function () {
                             styleFragment.appendChild(newStyleReelItem);
                         });
                         reelStyleContainer.appendChild(styleFragment);
+                        bassFragment = document.createDocumentFragment();
+                        randomBasses.forEach(function (style) {
+                            var newBassReelItem = document.createElement('div');
+                            newBassReelItem.innerHTML = style;
+                            bassFragment.appendChild(newBassReelItem);
+                        });
+                        reelBassContainer.appendChild(bassFragment);
+                        drumFragment = document.createDocumentFragment();
+                        randomDrums.forEach(function (style) {
+                            var newDrumReelItem = document.createElement('div');
+                            newDrumReelItem.innerHTML = style;
+                            drumFragment.appendChild(newDrumReelItem);
+                        });
+                        reelDrumContainer.appendChild(drumFragment);
                         console.log('Displayed items: ', randomNames);
                         console.log('Winner: ', randomNames[randomNames.length - 1]);
                         // Remove winner form name list if necessary
@@ -262,6 +344,8 @@ var Slot = /** @class */ (function () {
                             this.nameList.splice(this.nameList.findIndex(function (name) { return name === randomNames[randomNames.length - 1]; }), 1);
                             this.genreList.splice(this.genreList.findIndex(function (genre) { return genre === randomGenres[randomGenres.length - 1]; }), 1);
                             this.styleList.splice(this.styleList.findIndex(function (style) { return style === randomStyles[randomStyles.length - 1]; }), 1);
+                            this.bassList.splice(this.bassList.findIndex(function (bass) { return bass === randomBasses[randomBasses.length - 1]; }), 1);
+                            this.drumList.splice(this.drumList.findIndex(function (drum) { return drum === randomDrums[randomDrums.length - 1]; }), 1);
                         }
                         console.log('Remaining: ', this.nameList);
                         animationPromise = new Promise(function (resolve) {
@@ -269,14 +353,20 @@ var Slot = /** @class */ (function () {
                                 reelAnimation === null || reelAnimation === void 0 ? void 0 : reelAnimation.removeEventListener('finish', onAnimationFinish);
                                 reelGenreAnimation === null || reelGenreAnimation === void 0 ? void 0 : reelGenreAnimation.removeEventListener('finish', onAnimationFinish);
                                 reelStyleAnimation === null || reelStyleAnimation === void 0 ? void 0 : reelStyleAnimation.removeEventListener('finish', onAnimationFinish);
+                                reelBassAnimation === null || reelBassAnimation === void 0 ? void 0 : reelBassAnimation.removeEventListener('finish', onAnimationFinish);
+                                reelDrumAnimation === null || reelDrumAnimation === void 0 ? void 0 : reelDrumAnimation.removeEventListener('finish', onAnimationFinish);
                                 resolve();
                             };
                             reelAnimation === null || reelAnimation === void 0 ? void 0 : reelAnimation.addEventListener('finish', onAnimationFinish);
                             reelGenreAnimation === null || reelGenreAnimation === void 0 ? void 0 : reelGenreAnimation.addEventListener('finish', onAnimationFinish);
                             reelStyleAnimation === null || reelStyleAnimation === void 0 ? void 0 : reelStyleAnimation.addEventListener('finish', onAnimationFinish);
+                            reelBassAnimation === null || reelBassAnimation === void 0 ? void 0 : reelBassAnimation.addEventListener('finish', onAnimationFinish);
+                            reelDrumAnimation === null || reelDrumAnimation === void 0 ? void 0 : reelDrumAnimation.addEventListener('finish', onAnimationFinish);
                             reelAnimation === null || reelAnimation === void 0 ? void 0 : reelAnimation.play();
                             reelGenreAnimation === null || reelGenreAnimation === void 0 ? void 0 : reelGenreAnimation.play();
                             reelStyleAnimation === null || reelStyleAnimation === void 0 ? void 0 : reelStyleAnimation.play();
+                            reelBassAnimation === null || reelBassAnimation === void 0 ? void 0 : reelBassAnimation.play();
+                            reelDrumAnimation === null || reelDrumAnimation === void 0 ? void 0 : reelDrumAnimation.play();
                         });
                         return [4 /*yield*/, animationPromise];
                     case 1:
@@ -286,6 +376,8 @@ var Slot = /** @class */ (function () {
                         reelAnimation === null || reelAnimation === void 0 ? void 0 : reelAnimation.finish();
                         reelGenreAnimation === null || reelGenreAnimation === void 0 ? void 0 : reelGenreAnimation.finish();
                         reelStyleAnimation === null || reelStyleAnimation === void 0 ? void 0 : reelStyleAnimation.finish();
+                        reelBassAnimation === null || reelBassAnimation === void 0 ? void 0 : reelBassAnimation.finish();
+                        reelDrumAnimation === null || reelDrumAnimation === void 0 ? void 0 : reelDrumAnimation.finish();
                         Array.from(reelContainer.children)
                             .slice(0, reelContainer.children.length - 1)
                             .forEach(function (element) { return element.remove(); });
@@ -294,6 +386,12 @@ var Slot = /** @class */ (function () {
                             .forEach(function (element) { return element.remove(); });
                         Array.from(reelStyleContainer.children)
                             .slice(0, reelStyleContainer.children.length - 1)
+                            .forEach(function (element) { return element.remove(); });
+                        Array.from(reelBassContainer.children)
+                            .slice(0, reelBassContainer.children.length - 1)
+                            .forEach(function (element) { return element.remove(); });
+                        Array.from(reelDrumContainer.children)
+                            .slice(0, reelDrumContainer.children.length - 1)
                             .forEach(function (element) { return element.remove(); });
                         this.havePreviousWinner = true;
                         if (this.onSpinEnd) {

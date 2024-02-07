@@ -193,7 +193,7 @@
     <div class="slots-container">
       <div class="slot-group">
         <div class="slot-text">
-          <p>Song Title</p>
+          <p>Vocal</p>
         </div>
         <div class="slot">
           <div class="slot__outer">
@@ -207,7 +207,7 @@
       </div>
       <div class="slot-group">
         <div class="slot-text">
-          <p>Genre</p>
+          <p>Guitar</p>
         </div>
         <div class="slot">
           <div class="slot__outer">
@@ -221,13 +221,43 @@
       </div>
       <div class="slot-group">
         <div class="slot-text">
-          <p>Style</p>
+          <p>Keyboard</p>
         </div>
         <div class="slot">
           <div class="slot__outer">
             <div class="slot__inner">
               <div class="slot__shadow">
                 <div class="stylereel" id="stylereel"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="slots-container">
+      <div class="slot-group">
+        <div class="slot-text">
+          <p>Bass</p>
+        </div>
+        <div class="slot">
+          <div class="slot__outer">
+            <div class="slot__inner">
+              <div class="slot__shadow">
+                <div class="bassreel" id="bassreel"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="slot-group">
+        <div class="slot-text">
+          <p>Drum</p>
+        </div>
+        <div class="slot">
+          <div class="slot__outer">
+            <div class="slot__inner">
+              <div class="slot__shadow">
+                <div class="drumreel" id="drumreel"></div>
               </div>
             </div>
           </div>
@@ -243,12 +273,16 @@
       <div class="settings__panel__group">
         <h1 class="settings__title">Settings</h1>
         <div class="input-group">
-          <label class="input-label" for="song-title-list">Song Title List</label>
+          <label class="input-label" for="song-title-list">Vocal List</label>
           <textarea class="input-field input-field--textarea" rows="8" placeholder="Separate each name by line break" id="name-list"></textarea>
-          <label class="input-label" for="genre-list">Genre List</label>
+          <label class="input-label" for="genre-list">Guitar List</label>
           <textarea class="input-field input-field--textarea" rows="8" placeholder="Separate each name by line break" id="genre-list"></textarea>
-          <label class="input-label" for="style-list">Style List</label>
+          <label class="input-label" for="style-list">Keyboard List</label>
           <textarea class="input-field input-field--textarea" rows="8" placeholder="Separate each name by line break" id="style-list"></textarea>
+          <label class="input-label" for="bass-list">Bass List</label>
+          <textarea class="input-field input-field--textarea" rows="8" placeholder="Separate each name by line break" id="bass-list"></textarea>
+          <label class="input-label" for="drum-list">Drum List</label>
+          <textarea class="input-field input-field--textarea" rows="8" placeholder="Separate each name by line break" id="drum-list"></textarea>
         </div>
         <div class="input-group input-group--2-column">
           <label class="input-label" for="remove-from-list">Remove winner from list</label>
