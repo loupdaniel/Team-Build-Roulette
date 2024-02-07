@@ -1,9 +1,9 @@
 <p align="center">
     <img alt="Charming Jo Youtube Channel Logo" src="./Charming Jo Logo.png" width="100" />
 </p>
-<h1 align="center">Sync Perfect</h1>
+<h1 align="center">Team Build Roulette</h1>
 <p align="center">
-    Simple HTML5 roulette for picking song title, genre, style using Web Animations and AudioContext API
+    Simple HTML5 roulette for picking vocal, guitar, keyboard, bass, and drum using Web Animations and AudioContext API
 </p>
 
 <p align="center">
@@ -17,7 +17,7 @@
 </p>
 
 ## Live Demo
-Demo is available at [https://sync-perfect.vercel.app/](https://sync-perfect.vercel.app/)
+Demo is available at [https://team-build-roulette.vercel.app/](https://team-build-roulette.vercel.app/)
 
 ### Technology Stack
 
